@@ -5,6 +5,7 @@
 //import 'dart:html';
 
 import 'package:flutter/material.dart';
+import 'package:myapp/PowerUsageTile.dart';
 import 'package:myapp/blank_tile.dart';
 import 'package:myapp/buienradar_rain_tile.dart';
 import 'package:myapp/buienradar_weather_tile.dart';
@@ -67,7 +68,7 @@ class _MainWidgetState extends State<MainWidget> {
         new BuienRadarWeatherTile(6260),
         new BuienRadarRainTile(52.02, 5.18),
         new MinecraftTile("https://prometheus.kiezelsteen18.nl"),
-        new BlankTTile(),
+        new PowerUsageTile(myMqtt),
         new BlankTTile(),
         new BlankTTile(),
         new BlankTTile(),

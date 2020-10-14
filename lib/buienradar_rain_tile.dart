@@ -1,10 +1,10 @@
 import 'dart:async';
 import 'dart:math';
 
-import 'package:charts_flutter/flutter.dart' as charts;
 import 'package:flutter/material.dart';
 import 'package:logging/logging.dart';
 import 'package:http/http.dart' as http;
+import 'TimeSeriesChart.dart';
 
 class BuienRadarRainTile extends StatefulWidget {
   final double lat, lon;
@@ -16,13 +16,13 @@ class BuienRadarRainTile extends StatefulWidget {
 
 class _BuienRadarRainTileState extends State<BuienRadarRainTile> {
   var log = Logger('myapp.buienradar_rain_tile.dart');
-  List<charts.Series<RainData, DateTime>> rain;
+  List<TimeSeriesData> data;
   bool hasRain = false;
 
 
-  List<charts.Series<RainData, DateTime>> _parseRainData(String data) {
+  List<TimeSeriesData> _parseRainData(String data) {
     hasRain = false;
-    var result = new List<RainData>();
+    var result = new List<TimeSeriesData>();
     data.split('\n').forEach((element) {
       // log.info("Handling rain data line: $element");
       if (element.length > 7) {
@@ -41,48 +41,28 @@ class _BuienRadarRainTileState extends State<BuienRadarRainTile> {
           now = now.add(new Duration(days: 1));
         }
         DateTime date = new DateTime(now.year, now.month, now.day, hour, minute);
-        result.add(RainData(date, rainValue));
+        result.add(TimeSeriesData(date, rainValue));
       }
     });
 
-    return [
-      new charts.Series<RainData, DateTime>(
-        id: 'Rain',
-        colorFn: (_, __) => charts.MaterialPalette.blue.shadeDefault,
-        domainFn: (RainData rain, _) => rain.date,
-        measureFn: (RainData rain, _) => rain.rain,
-        data: result,
-      )
-    ];
+    return result;
 
   }
 
   Future _get_rain() async {
     final response = await http.get("https://gpsgadget.buienradar.nl/data/raintext/?lat=${widget.lat}&lon=${widget.lon}").whenComplete(() => {});
     if (response.statusCode == 200) {
-      List<charts.Series<RainData, DateTime>> result = _parseRainData(response.body);
+      List<TimeSeriesData> result = _parseRainData(response.body);
+      // List<TimeSeriesData> result = _parseRainData(_fakeData);
       log.info("Buienradar feed returned: ${response.body}");
 
       setState(() {
-        this.rain = result;
+        this.data = result;
       });
     } else {
       log.warning("Buienradar feed returned code ${response.statusCode} and body: ${response.body}");
       return;
     }
-  }
-
-
-  static List<charts.Series<RainData, DateTime>> _createChart(List<RainData> data) {
-    return [
-      new charts.Series<RainData, DateTime>(
-        id: 'Rain',
-        colorFn: (_, __) => charts.MaterialPalette.blue.shadeDefault,
-        domainFn: (RainData rain, _) => rain.date,
-        measureFn: (RainData rain, _) => rain.rain,
-        data: data,
-      )
-    ];
   }
 
   @override
@@ -93,16 +73,6 @@ class _BuienRadarRainTileState extends State<BuienRadarRainTile> {
       log.info("Updating data");
       _get_rain();
     });
-  }
-
-  Widget _createGraph() {
-    return new charts.TimeSeriesChart(
-      rain,
-      animate: false,
-      defaultRenderer: new charts.LineRendererConfig<DateTime>(),
-      defaultInteractions: false,
-      // behaviors: [new charts.SelectNearest(), new charts.DomainHighlighter()],
-    );
   }
 
   @override
@@ -120,7 +90,8 @@ class _BuienRadarRainTileState extends State<BuienRadarRainTile> {
           )
       );
     } else {
-      content = _createGraph();
+      content = new TimeSeriesChart(data, legendaY: "mm");
+
     }
 
     return
@@ -177,9 +148,27 @@ class _BuienRadarRainTileState extends State<BuienRadarRainTile> {
   }
 }
 
-class RainData {
-  final DateTime date;
-  final double rain;
-
-  RainData(this.date, this.rain);
-}
+String _fakeData = '''057|22:50
+057|22:55
+077|23:00
+087|23:05
+087|23:10
+097|23:15
+105|23:20
+117|23:25
+125|23:30
+105|23:35
+095|23:40
+085|23:45
+075|23:50
+067|23:55
+057|00:00
+035|00:05
+035|00:10
+035|00:15
+035|00:20
+000|00:25
+000|00:30
+000|00:35
+000|00:40
+000|00:45''';

@@ -46,22 +46,32 @@ class _TemperatureTileState extends State<TemperatureTile> {
   }
 
   @override
+  void initState() {
+    widget.myMqtt.subscribe("/env/woonkamer_sensor/temperature", (String message){
+      log.info("parsing message: $message");
+      _updateTemperature(message);
+    });
+    widget.myMqtt.subscribe("/env/cv/setpoint", (String message){
+      log.info("parsing message: $message");
+      _updateSetpoint(message);
+    });
+    widget.myMqtt.subscribe("/env/cv/heater", (String message){
+      log.info("parsing message: $message");
+      _updateHeater(message);
+    });
+    super.initState();
+  }
+
+  @override
   Widget build(BuildContext context) {
-    if (! widget.myMqtt.connected) {
-      widget.myMqtt.subscribe("/env/woonkamer_sensor/temperature", (String message){
-        log.info("parsing message: $message");
-        _updateTemperature(message);
-      });
-      widget.myMqtt.subscribe("/env/cv/setpoint", (String message){
-        log.info("parsing message: $message");
-        _updateSetpoint(message);
-      });
-      widget.myMqtt.subscribe("/env/cv/heater", (String message){
-        log.info("parsing message: $message");
-        _updateHeater(message);
-      });
-    }
-    return _buildWidget();
+    return
+      Container(
+        margin: const EdgeInsets.all(10.0),
+        color: heaterOn?Colors.red[900]:Colors.grey[900],
+        width: 100.0,
+        height: 100.0,
+        child: _content(),
+      );
   }
 
   Widget _content() {
@@ -130,16 +140,5 @@ class _TemperatureTileState extends State<TemperatureTile> {
         ),
       ],
     );
-  }
-  Widget _buildWidget() {
-    return
-      Container(
-        margin: const EdgeInsets.all(10.0),
-        color: heaterOn?Colors.red[900]:Colors.grey[900],
-        width: 100.0,
-        height: 100.0,
-        child:
-              _content(),
-      );
   }
 }
