@@ -1,0 +1,145 @@
+import 'package:flutter/cupertino.dart';
+import 'package:logging/logging.dart';
+import 'package:flutter/material.dart';
+import 'mqtt.dart';
+
+class TemperatureTile extends StatefulWidget {
+  final MqttClient myMqtt;
+  const TemperatureTile (this.myMqtt): super();
+  @override
+  _TemperatureTileState createState() => _TemperatureTileState();
+
+}
+
+class _TemperatureTileState extends State<TemperatureTile> {
+  var log = Logger('myapp.temperature_tile.dart');
+  double temperature = -255;
+  double setPoint = -255;
+  bool heaterOn = false;
+
+  _updateTemperature(String message) {
+    log.info("Got temperature: $message");
+    setState(() {
+      this.temperature = double.parse(message);
+    });
+  }
+
+  _updateHeater(String message) {
+    log.info("Got heater: $message");
+    setState(() {
+      this.heaterOn = message == "ON";
+    });
+  }
+
+  _updateSetpoint(String message) {
+    log.info("Got setpoint: $message");
+    setState(() {
+      this.setPoint = double.parse(message);
+    });
+  }
+
+  _setSetpoint(double value) {
+    log.info("Set setpoint $value");
+    if (setPoint > 0) {
+      widget.myMqtt.publish("/env/cv/setpoint", value.toString(), true);
+    }
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    if (! widget.myMqtt.connected) {
+      widget.myMqtt.subscribe("/env/woonkamer_sensor/temperature", (String message){
+        log.info("parsing message: $message");
+        _updateTemperature(message);
+      });
+      widget.myMqtt.subscribe("/env/cv/setpoint", (String message){
+        log.info("parsing message: $message");
+        _updateSetpoint(message);
+      });
+      widget.myMqtt.subscribe("/env/cv/heater", (String message){
+        log.info("parsing message: $message");
+        _updateHeater(message);
+      });
+    }
+    return _buildWidget();
+  }
+
+  Widget _content() {
+    return Column(
+      children: [
+        Expanded(
+          child:
+          FittedBox(
+          fit: BoxFit.contain,
+          child: Center(
+              child: Text(
+                "Thermostaat",
+                style: TextStyle(color: Colors.white),
+              ),
+            ),
+          ),
+        ),
+        Expanded(
+          child: FittedBox(
+            fit: BoxFit.contain,
+            child: Center(
+                child: Text(
+                  temperature==-255?"- -":temperature.toStringAsFixed(1) + '°C',
+                  style: TextStyle(color: Colors.white),
+                )
+            ),
+          ),
+        ),
+
+        Row(
+          children: [
+            Expanded(
+              child: FittedBox(
+                fit: BoxFit.contain,
+                child: IconButton(
+                    icon: Icon(Icons.remove),
+                    color: Colors.white,
+                    tooltip: "-",
+                    onPressed: () {_setSetpoint(setPoint-0.5);}
+                ),
+              ),
+            ),
+
+            Expanded(
+              child: FittedBox(
+                fit: BoxFit.contain,
+                child: Text(
+                  setPoint.toStringAsFixed(1) + '°C',
+                  style: TextStyle(color: Colors.white),
+                ),
+              ),
+            ),
+
+            Expanded(
+              child: FittedBox(
+                fit: BoxFit.contain,
+                child: IconButton(
+                    icon: Icon(Icons.add),
+                    color: Colors.white,
+                    tooltip: "+",
+                    onPressed: () {_setSetpoint(setPoint+0.5);}
+                ),
+              ),
+            ),
+          ],
+        ),
+      ],
+    );
+  }
+  Widget _buildWidget() {
+    return
+      Container(
+        margin: const EdgeInsets.all(10.0),
+        color: heaterOn?Colors.red[900]:Colors.grey[900],
+        width: 100.0,
+        height: 100.0,
+        child:
+              _content(),
+      );
+  }
+}
