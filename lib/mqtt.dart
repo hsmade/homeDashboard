@@ -51,7 +51,9 @@ class MqttClient {
     void _onDisconnected() {
       log.info('OnDisconnected client callback - Client disconnection');
       connected = false;
+      log.info("reconnecing..");
       connect();
+      resubscribe();
     }
 
     /// The successful connect callback
@@ -116,6 +118,13 @@ class MqttClient {
     }
 
     return connected;
+  }
+
+  resubscribe() {
+    log.info("re-subscribing after reconnect");
+    this.subscribers.forEach((topic, _) {
+      client.subscribe(topic, MqttQos.atMostOnce);
+    });
   }
 
   Future<bool> subscribe(String topic,
