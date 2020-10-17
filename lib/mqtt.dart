@@ -21,10 +21,10 @@ class MqttClient {
   _connect() async {
     connecting = true;
     log.info("Setting up client for mqtt");
-    client = MqttServerClient("mqtt.kiezelsteen18.nl", "key");
+    client = MqttServerClient(hostName, "key");
     client.logging(on: true);
     final MqttConnectMessage connMess = MqttConnectMessage()
-        .withClientIdentifier('myClientID')
+        .withClientIdentifier(clientID)
         .keepAliveFor(60)
         .startClean()
         .withWillQos(MqttQos.atMostOnce);
@@ -37,10 +37,11 @@ class MqttClient {
       log.severe('EXCEPTION::client exception - $e');
       client.disconnect();
       client = null;
+      connected = false;
       connecting = false;
       return false;
     }
-    connecting = false;
+    log.info("client.connect() returned");
 
     /// The subscribed callback
     void _onSubscribed(String topic) {
@@ -48,11 +49,11 @@ class MqttClient {
     }
 
     /// The unsolicited disconnect callback
-    void _onDisconnected() {
+    void _onDisconnected() async {
       log.info('OnDisconnected client callback - Client disconnection');
       connected = false;
       log.info("reconnecing..");
-      connect();
+      await connect();
       resubscribe();
     }
 
@@ -109,11 +110,12 @@ class MqttClient {
     }
 
     while (connecting) {
-      log.info("waiting for connection to settle");
-      await Future.delayed(const Duration(microseconds: 100));
+      log.info("Connecting is already in progress, waiting for that to happen...");
+      await Future.delayed(const Duration(microseconds: 200));
     }
 
     if (client == null || !connected) {
+      log.info("Connecting not in progress, client=$client and connected=$connected, reconnecting");
       await _connect();
     }
 

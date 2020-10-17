@@ -15,11 +15,19 @@ import 'mqtt.dart';
 import 'package:logging/logging.dart';
 import 'package:logging_appenders/logging_appenders.dart';
 import 'temperature_tile.dart';
+import 'package:uuid/uuid.dart';
 
 final _logger = Logger('myapp.main.dart');
 
 void main(){
-  PrintAppender.setupLogging();
+  Logger.root.level = Level.ALL;
+  final _lokiAppender = new LokiApiAppender(
+    server: "loki.kiezelsteen18.nl",
+    labels: {"app": "homeDashboard"},
+    username: "", password: ""
+  );
+  PrintAppender().attachToLogger(Logger.root);
+  _lokiAppender.attachToLogger(Logger.root);
   _logger.info("Starting main");
   runApp(MyApp());
 }
@@ -44,8 +52,10 @@ class MainWidget extends StatefulWidget {
 }
 
 class _MainWidgetState extends State<MainWidget> {
-  MqttClient myMqtt = MqttClient("mqtt.kiezelsteen18.nl", "test");
-  var log = Logger('main.dart');
+  @override
+  void initState() {
+    super.initState();
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -63,12 +73,12 @@ class _MainWidgetState extends State<MainWidget> {
       mainAxisSpacing: 0,
       crossAxisSpacing: 0,
       children: [
-        new TemperatureTile(myMqtt),
+        new TemperatureTile(new MqttClient("mqtt.kiezelsteen18.nl", Uuid().v4())),
         new WtWTile("https://prometheus.kiezelsteen18.nl"),
         new BuienRadarWeatherTile(6260),
         new BuienRadarRainTile(52.02, 5.18),
         new MinecraftTile("https://prometheus.kiezelsteen18.nl"),
-        new PowerUsageTile(myMqtt),
+        new PowerUsageTile(new MqttClient("mqtt.kiezelsteen18.nl", Uuid().v4())),
         new BlankTTile(),
         new BlankTTile(),
         new BlankTTile(),

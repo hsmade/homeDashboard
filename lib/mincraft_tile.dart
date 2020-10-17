@@ -38,9 +38,6 @@ class _MinecraftTileState extends State<MinecraftTile> {
 
   _updateValues() async {
     final users = await _get_prometheus_value('sum(mc_player_online) by (name) > 0');
-    if (users.length == 0) {
-      users.add("- -");
-    }
 
     setState(() {
       this.users = users;
@@ -91,7 +88,7 @@ class _MinecraftTileState extends State<MinecraftTile> {
                       FittedBox(
                         fit: BoxFit.contain,
                         child: Center(
-                          child: Text(users.join("\n"), style: TextStyle(color: Colors.white),
+                          child: Text((users!=null && users.length>0)?users.join("\n"):"  ", style: TextStyle(color: Colors.white),
                           ),
                         ),
                       ),

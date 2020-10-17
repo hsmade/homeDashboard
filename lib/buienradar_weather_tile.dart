@@ -67,7 +67,7 @@ class _BuienRadarWeatherTileState extends State<BuienRadarWeatherTile> {
     return
     GestureDetector(
       onTap: () { _get_weather(widget.station); },
-      child:       Container(
+      child: Container(
           margin: const EdgeInsets.all(10.0),
           color:Colors.grey[900],
           width: 100.0,
@@ -90,7 +90,7 @@ class _BuienRadarWeatherTileState extends State<BuienRadarWeatherTile> {
                 child: FittedBox(
                   fit: BoxFit.contain,
                   child: Center(
-                      child: Image.network(icon)
+                      child: (icon != null)?Image.network(icon):Text(" - - ")
                   ),
                 ),
               ),
