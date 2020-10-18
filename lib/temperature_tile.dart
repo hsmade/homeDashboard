@@ -3,6 +3,7 @@ import 'package:logging/logging.dart';
 import 'package:flutter/material.dart';
 import 'mqtt.dart';
 import 'package:numberpicker/numberpicker.dart';
+import 'tile.dart';
 
 class TemperatureTile extends StatefulWidget {
   final MqttClient myMqtt;
@@ -67,6 +68,31 @@ class _TemperatureTileState extends State<TemperatureTile> {
   @override
   Widget build(BuildContext context) {
     return
+    Tile("Thermostaat",
+      Column(
+        children: [
+          Expanded(
+            flex: 3,
+            child: FittedBox(
+              fit: BoxFit.contain,
+              child: Center(
+                  child: Text(
+                    temperature==-255?"- -":temperature.toStringAsFixed(1) + '°C',
+                    style: TextStyle(color: Colors.white),
+                  )
+              ),
+            ),
+          ),
+          Expanded(
+            flex: 2,
+            child: new NumberPicker.integer(
+              initialValue: setPoints.indexOf(setPoint), minValue: 0, maxValue: setPoints.length, onChanged: (index) => _setSetpoint(setPoints[index]),
+              textMapper: (index) => setPoints[int.parse(index)].toString(),
+            )
+          ),
+        ],
+      )
+    );
       Container(
         margin: const EdgeInsets.all(10.0),
         color: heaterOn?Colors.red[900]:Colors.grey[900],
@@ -106,43 +132,6 @@ class _TemperatureTileState extends State<TemperatureTile> {
         new NumberPicker.integer(initialValue: setPoints.indexOf(setPoint), minValue: 0, maxValue: setPoints.length, onChanged: (index) => _setSetpoint(setPoints[index]),
         textMapper: (index) => setPoints[int.parse(index)].toString(),
         ),
-        // Row(
-          // children: [
-          //   Expanded(
-          //     child: FittedBox(
-          //       fit: BoxFit.contain,
-          //       child: IconButton(
-          //           icon: Icon(Icons.remove),
-          //           color: Colors.white,
-          //           tooltip: "-",
-          //           onPressed: () {_setSetpoint(setPoint-0.5);}
-          //       ),
-          //     ),
-          //   ),
-          //
-          //   Expanded(
-          //     child: FittedBox(
-          //       fit: BoxFit.contain,
-          //       child: Text(
-          //         setPoint.toStringAsFixed(1) + '°C',
-          //         style: TextStyle(color: Colors.white),
-          //       ),
-          //     ),
-          //   ),
-          //
-          //   Expanded(
-          //     child: FittedBox(
-          //       fit: BoxFit.contain,
-          //       child: IconButton(
-          //           icon: Icon(Icons.add),
-          //           color: Colors.white,
-          //           tooltip: "+",
-          //           onPressed: () {_setSetpoint(setPoint+0.5);}
-          //       ),
-          //     ),
-          //   ),
-          // ],
-        // ),
       ],
     );
   }

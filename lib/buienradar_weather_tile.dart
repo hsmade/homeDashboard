@@ -4,6 +4,7 @@ import 'dart:convert';
 import 'package:flutter/material.dart';
 import 'package:logging/logging.dart';
 import 'package:http/http.dart' as http;
+import 'tile.dart';
 
 class BuienRadarWeatherTile extends StatefulWidget {
   final int station;
@@ -67,26 +68,11 @@ class _BuienRadarWeatherTileState extends State<BuienRadarWeatherTile> {
     return
     GestureDetector(
       onTap: () { _getWeather(widget.station); },
-      child: Container(
-          margin: const EdgeInsets.all(10.0),
-          color:Colors.grey[900],
-          width: 100.0,
-          height: 100.0,
-          child: Column(
+      child: Tile("Weer",
+          Column(
             children: [
               Expanded(
-                child:
-                FittedBox(
-                  fit: BoxFit.contain,
-                  child: Center(
-                    child: Text(
-                      "     Weer      ",
-                      style: TextStyle(color: Colors.white),
-                    ),
-                  ),
-                ),
-              ),
-              Expanded(
+                flex: 4,
                 child: FittedBox(
                   fit: BoxFit.contain,
                   child: Center(
@@ -95,6 +81,7 @@ class _BuienRadarWeatherTileState extends State<BuienRadarWeatherTile> {
                 ),
               ),
               Expanded(
+                flex: 1,
                 child: FittedBox(
                   fit: BoxFit.contain,
                   child: Center(

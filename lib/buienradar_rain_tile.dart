@@ -5,6 +5,7 @@ import 'package:flutter/material.dart';
 import 'package:logging/logging.dart';
 import 'package:http/http.dart' as http;
 import 'TimeSeriesChart.dart';
+import 'tile.dart';
 
 class BuienRadarRainTile extends StatefulWidget {
   final double lat, lon;
@@ -98,53 +99,18 @@ class _BuienRadarRainTileState extends State<BuienRadarRainTile> {
     GestureDetector(
       onTap: () { _getRain(); },
       child:
-        Container(
-          margin: const EdgeInsets.all(10.0),
-          color:Colors.grey[900],
-          width: 100.0,
-          height: 100.0,
-          child:
-              Stack (
-                children: [
-                  content,
-                  Center(
-                    child:
-                      Column(
-                        children: [
-                          Expanded(
-                            flex: 1,
-                            child:
-                            FittedBox(
-                              fit: BoxFit.contain,
-                              child: Center(
-                                child: Text(
-                                  "Regen",
-                                  style: TextStyle(color: Colors.white),
-                                ),
-                              ),
-                            ),
-                          ),
-                          Expanded(
-                            flex: 5,
-                            child:
-                            FittedBox(
-                              fit: BoxFit.contain,
-                              child: Center(
-                                child: Text(
-                                  " ",
-                                  style: TextStyle(color: Colors.white),
-                                ),
-                              ),
-                            ),
-                          ),
-                        ],
-                      ),
-                  ),
-
-                ],
-              )
-        )
-    );
+          Tile("Regen",
+            FittedBox(
+              fit: BoxFit.contain,
+              child: Center(
+                child: Text(
+                  " ",
+                  style: TextStyle(color: Colors.white),
+                ),
+              ),
+            )
+          )
+        );
   }
 }
 

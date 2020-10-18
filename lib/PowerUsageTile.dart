@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'mqtt.dart';
 import 'package:logging/logging.dart';
 import 'TimeSeriesChart.dart';
+import 'tile.dart';
 
 
 class PowerUsageTile extends StatefulWidget {
@@ -52,33 +53,7 @@ class _PowerUsageTileState extends State<PowerUsageTile> {
     );
   }
 
-  // List<charts.Series<TimeSeriesData, DateTime>> createSeries(List<TimeSeriesData> data) {
-  //   return [
-  //     new charts.Series<TimeSeriesData, DateTime>(
-  //       id: 'Data',
-  //       colorFn: (_, __) => charts.MaterialPalette.red.shadeDefault,
-  //       domainFn: (TimeSeriesData point, _) => point.time,
-  //       measureFn: (TimeSeriesData point, _) => point.data,
-  //       data: data,
-  //     )
-  //   ];
-  // }
-  //
   Widget _content() {
-    return Column(
-      children: [
-        Expanded(
-          child: FittedBox(
-            fit: BoxFit.contain,
-            child: Center(
-              child: Text("Stroom", style: TextStyle(color: Colors.white)),
-            ),
-          ),
-        ),
-        Expanded(
-            child: new TimeSeriesChart(data, legendaY: "Watt")
-        ),
-      ]
-    );
+    return Tile("Stroom", new TimeSeriesChart(data, legendaY: "Watt"));
   }
 }

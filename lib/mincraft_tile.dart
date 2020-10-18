@@ -4,6 +4,7 @@ import 'dart:convert';
 import 'package:flutter/material.dart';
 import 'package:logging/logging.dart';
 import 'package:http/http.dart' as http;
+import 'tile.dart';
 
 class MinecraftTile extends StatefulWidget {
   final String prometheusURL;
@@ -58,45 +59,14 @@ class _MinecraftTileState extends State<MinecraftTile> {
   Widget build(BuildContext context) {
     // _update_values();
 
-    return
-      Container(
-          margin: const EdgeInsets.all(10.0),
-          color:Colors.grey[900],
-          width: 100.0,
-          height: 100.0,
-          child:
-              Center(
-                child:
-                Column(
-                  children: [
-                    Expanded(
-                      flex: 1,
-                      child:
-                      FittedBox(
-                        fit: BoxFit.contain,
-                        child: Center(
-                          child: Text(
-                            "Minecraft",
-                            style: TextStyle(color: Colors.white),
-                          ),
-                        ),
-                      ),
-                    ),
-                    Expanded(
-                      flex: 5,
-                      child:
-                      FittedBox(
-                        fit: BoxFit.contain,
-                        child: Center(
-                          child: Text((users!=null && users.length>0)?users.join("\n"):"  ", style: TextStyle(color: Colors.white),
-                          ),
-                        ),
-                      ),
-                    ),
-                  ],
-                ),
-              ),
-
-      );
+    return Tile("Minecraft",
+      FittedBox(
+        fit: BoxFit.contain,
+        child: Center(
+          child: Text((users!=null && users.length>0)?users.join("\n"):"  ", style: TextStyle(color: Colors.white),
+          ),
+        ),
+      ),
+    );
   }
 }
