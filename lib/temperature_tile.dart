@@ -2,6 +2,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:logging/logging.dart';
 import 'package:flutter/material.dart';
 import 'mqtt.dart';
+import 'package:numberpicker/numberpicker.dart';
 
 class TemperatureTile extends StatefulWidget {
   final MqttClient myMqtt;
@@ -16,6 +17,7 @@ class _TemperatureTileState extends State<TemperatureTile> {
   double temperature = -255;
   double setPoint = -255;
   bool heaterOn = false;
+  List<double> setPoints = [for(var i=18.0; i<28.0; i+=0.5) i];
 
   _updateTemperature(String message) {
     log.info("Got temperature: $message");
@@ -101,43 +103,46 @@ class _TemperatureTileState extends State<TemperatureTile> {
           ),
         ),
 
-        Row(
-          children: [
-            Expanded(
-              child: FittedBox(
-                fit: BoxFit.contain,
-                child: IconButton(
-                    icon: Icon(Icons.remove),
-                    color: Colors.white,
-                    tooltip: "-",
-                    onPressed: () {_setSetpoint(setPoint-0.5);}
-                ),
-              ),
-            ),
-
-            Expanded(
-              child: FittedBox(
-                fit: BoxFit.contain,
-                child: Text(
-                  setPoint.toStringAsFixed(1) + '°C',
-                  style: TextStyle(color: Colors.white),
-                ),
-              ),
-            ),
-
-            Expanded(
-              child: FittedBox(
-                fit: BoxFit.contain,
-                child: IconButton(
-                    icon: Icon(Icons.add),
-                    color: Colors.white,
-                    tooltip: "+",
-                    onPressed: () {_setSetpoint(setPoint+0.5);}
-                ),
-              ),
-            ),
-          ],
+        new NumberPicker.integer(initialValue: setPoints.indexOf(setPoint), minValue: 0, maxValue: setPoints.length, onChanged: (index) => _setSetpoint(setPoints[index]),
+        textMapper: (index) => setPoints[int.parse(index)].toString(),
         ),
+        // Row(
+          // children: [
+          //   Expanded(
+          //     child: FittedBox(
+          //       fit: BoxFit.contain,
+          //       child: IconButton(
+          //           icon: Icon(Icons.remove),
+          //           color: Colors.white,
+          //           tooltip: "-",
+          //           onPressed: () {_setSetpoint(setPoint-0.5);}
+          //       ),
+          //     ),
+          //   ),
+          //
+          //   Expanded(
+          //     child: FittedBox(
+          //       fit: BoxFit.contain,
+          //       child: Text(
+          //         setPoint.toStringAsFixed(1) + '°C',
+          //         style: TextStyle(color: Colors.white),
+          //       ),
+          //     ),
+          //   ),
+          //
+          //   Expanded(
+          //     child: FittedBox(
+          //       fit: BoxFit.contain,
+          //       child: IconButton(
+          //           icon: Icon(Icons.add),
+          //           color: Colors.white,
+          //           tooltip: "+",
+          //           onPressed: () {_setSetpoint(setPoint+0.5);}
+          //       ),
+          //     ),
+          //   ),
+          // ],
+        // ),
       ],
     );
   }

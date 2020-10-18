@@ -35,6 +35,7 @@ dependencies:
   http:
   charts_flutter:
   uuid:
+  numberpicker:
 
 dev_dependencies:
   flutter_test:
