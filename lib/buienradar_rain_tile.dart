@@ -47,7 +47,6 @@ class _BuienRadarRainTileState extends State<BuienRadarRainTile> {
     });
 
     return result;
-
   }
 
   Future _getRain() async {
@@ -79,20 +78,18 @@ class _BuienRadarRainTileState extends State<BuienRadarRainTile> {
   @override
   Widget build(BuildContext context) {
     Widget content;
+
     if (!hasRain) {
       content =
-      Center(
-          child: Column (
+          Column (
             children: [
               Expanded(flex: 3, child: Text("")),
               Expanded(flex: 1, child: Text("Geen regen voorspeld", style: TextStyle(color: Colors.white))),
               Expanded(flex: 3, child: Text("")),
             ],
-          )
-      );
+          );
     } else {
       content = new TimeSeriesChart(data, legendaY: "mm");
-
     }
 
     return
@@ -100,15 +97,9 @@ class _BuienRadarRainTileState extends State<BuienRadarRainTile> {
       onTap: () { _getRain(); },
       child:
           Tile("Regen",
-            FittedBox(
-              fit: BoxFit.contain,
-              child: Center(
-                child: Text(
-                  " ",
-                  style: TextStyle(color: Colors.white),
-                ),
-              ),
-            )
+            Center(
+                child: content,
+            ),
           )
         );
   }

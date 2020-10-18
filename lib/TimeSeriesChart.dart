@@ -4,18 +4,15 @@ import 'package:charts_flutter/flutter.dart' as charts;
 class TimeSeriesChart extends StatelessWidget {
   final List<TimeSeriesData> data;
   final String legendaY;
+  final charts.Color Function(TimeSeriesData, int) colorFn;
 
-  TimeSeriesChart(this.data, {this.legendaY});
+  TimeSeriesChart(this.data, {this.legendaY, this.colorFn});
 
   List<charts.Series<TimeSeriesData, DateTime>> createSeries(List<TimeSeriesData> data) {
     return [
       new charts.Series<TimeSeriesData, DateTime>(
         id: 'Data',
-        colorFn: (_, value) {
-          if (data[value].data < 270) return charts.MaterialPalette.green.shadeDefault;
-          if (data[value].data < 400) return charts.MaterialPalette.blue.shadeDefault;
-          else return charts.MaterialPalette.red.shadeDefault;
-          },
+        colorFn: (colorFn==null)?(_, __) => charts.MaterialPalette.blue.shadeDefault:colorFn,
         domainFn: (TimeSeriesData point, _) => point.time,
         measureFn: (TimeSeriesData point, _) => point.data,
         data: data,

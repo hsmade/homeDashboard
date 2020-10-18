@@ -3,6 +3,7 @@ import 'mqtt.dart';
 import 'package:logging/logging.dart';
 import 'TimeSeriesChart.dart';
 import 'tile.dart';
+import 'package:charts_flutter/flutter.dart' as charts;
 
 
 class PowerUsageTile extends StatefulWidget {
@@ -54,6 +55,13 @@ class _PowerUsageTileState extends State<PowerUsageTile> {
   }
 
   Widget _content() {
-    return Tile("Stroom", new TimeSeriesChart(data, legendaY: "Watt"));
+    return Tile("Stroom", new TimeSeriesChart(data, legendaY: "Watt",
+      colorFn: (_, value) {
+        if (data[value].data < 230) return charts.MaterialPalette.green.shadeDefault;
+        if (data[value].data < 400) return charts.MaterialPalette.blue.shadeDefault;
+        else return charts.MaterialPalette.red.shadeDefault;
+      },
+    ));
+
   }
 }

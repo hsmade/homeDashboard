@@ -11,14 +11,12 @@ class BuienRadarWeatherTile extends StatefulWidget {
   const BuienRadarWeatherTile (this.station): super();
   @override
   _BuienRadarWeatherTileState createState() => _BuienRadarWeatherTileState();
-
 }
 
 class _BuienRadarWeatherTileState extends State<BuienRadarWeatherTile> {
   var log = Logger('myapp.buienradar_weather_tile.dart');
   double temperature;
   String icon;
-
 
   Future _getWeather(int station) async {
     final response = await http.get("https://data.buienradar.nl/2.0/feed/json").whenComplete(() => {});
@@ -42,14 +40,14 @@ class _BuienRadarWeatherTileState extends State<BuienRadarWeatherTile> {
       setState(() {
         log.info("Setting T=${myStation['temperature']} and url=${myStation['iconurl']}");
         this.temperature = myStation['temperature'];
-        this.icon = myStation['iconurl'];
+        this.icon = "https://cdn.buienradar.nl/resources/images/icons/weather/300x300/${myStation['iconurl'].split("/").last.split(".")[0].toString().toUpperCase()}.png"; ;
+        // this.icon = getIconFromUrl(myStation['iconurl']);
       });
     } else {
       log.warning("Buienradar feed returned code ${response.statusCode} and body: ${response.body}");
       return;
     }
   }
-
 
   @override
   void initState() {

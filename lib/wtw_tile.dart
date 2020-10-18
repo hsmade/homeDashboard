@@ -19,6 +19,7 @@ class _WtWTileState extends State<WtWTile> {
   double tempExtract;
   double tempOutdoor;
   double tempSupply;
+  double powerConsumption;
 
 
   Future<String> _getPrometheusValue(String metric) async {
@@ -38,12 +39,14 @@ class _WtWTileState extends State<WtWTile> {
     final extract = await _getPrometheusValue('comfoconnect_pdo_value{ID="274"} / 10');
     final outdoor = await _getPrometheusValue('comfoconnect_pdo_value{ID="220"} / 10');
     final supply = await _getPrometheusValue('comfoconnect_pdo_value{ID="221"} / 10');
+    final powerConsumption = await _getPrometheusValue('comfoconnect_pdo_value{ID="128"}');
 
     setState(() {
       this.tempExhaust = double.parse(exhaust);
       this.tempExtract = double.parse(extract);
       this.tempOutdoor = double.parse(outdoor);
       this.tempSupply = double.parse(supply);
+      this.powerConsumption = double.parse(powerConsumption);
     });
   }
 
@@ -96,7 +99,8 @@ class _WtWTileState extends State<WtWTile> {
                   child: Row(
                     children: [
                       Expanded(flex:5, child: FittedBox(fit: BoxFit.fill, child: Center(child: Text("$tempSupply°C", style: TextStyle(color: Colors.white))))),
-                      Expanded(flex:1, child: FittedBox(fit: BoxFit.fill, child: Center(child: Text(" ", style: TextStyle(color: Colors.white))))),
+                      Expanded(flex:5, child: FittedBox(fit: BoxFit.fill, child: Center(child: Text(" ${powerConsumption.round()}W ", style: TextStyle(color: Colors.white))))),
+                      // Expanded(flex:1, child: FittedBox(fit: BoxFit.fill, child: Center(child: Text(" ", style: TextStyle(color: Colors.white))))),
                       Expanded(flex:5, child: FittedBox(fit: BoxFit.fill, child: Center(child: Text("$tempExtract°C", style: TextStyle(color: Colors.white))))),
                     ],
                   ),
