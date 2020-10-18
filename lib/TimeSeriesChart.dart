@@ -11,7 +11,12 @@ class TimeSeriesChart extends StatelessWidget {
     return [
       new charts.Series<TimeSeriesData, DateTime>(
         id: 'Data',
-        colorFn: (_, __) => charts.MaterialPalette.blue.shadeDefault,
+        colorFn: (_, value) {
+          print("COLOR: value:${data[value].data}\n");
+          if (data[value].data < 270) return charts.MaterialPalette.green.shadeDefault;
+          if (data[value].data < 400) return charts.MaterialPalette.blue.shadeDefault;
+          else return charts.MaterialPalette.red.shadeDefault;
+          },
         domainFn: (TimeSeriesData point, _) => point.time,
         measureFn: (TimeSeriesData point, _) => point.data,
         data: data,
@@ -31,6 +36,11 @@ class TimeSeriesChart extends StatelessWidget {
             behaviorPosition: charts.BehaviorPosition.start,
             titleOutsideJustification: charts.OutsideJustification.middleDrawArea),
       ],
+        primaryMeasureAxis: new charts.NumericAxisSpec(
+            renderSpec: charts.GridlineRendererSpec(
+                lineStyle: charts.LineStyleSpec(
+                  dashPattern: [4, 4],
+                ))),
         domainAxis: new charts.DateTimeAxisSpec(
             tickFormatterSpec: new charts.AutoDateTimeTickFormatterSpec(
                 day: new charts.TimeFormatterSpec(

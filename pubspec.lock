@@ -157,7 +157,7 @@ packages:
       name: logging_appenders
       url: "https://pub.dartlang.org"
     source: hosted
-    version: "0.4.2+5"
+    version: "0.4.3"
   matcher:
     dependency: transitive
     description:
@@ -200,13 +200,6 @@ packages:
       url: "https://pub.dartlang.org"
     source: hosted
     version: "1.9.0"
-  rxdart:
-    dependency: transitive
-    description:
-      name: rxdart
-      url: "https://pub.dartlang.org"
-    source: hosted
-    version: "0.24.1"
   sky_engine:
     dependency: transitive
     description: flutter

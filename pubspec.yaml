@@ -31,11 +31,11 @@ dependencies:
   english_words: ^3.1.5
   mqtt_client: ^8.0.0
   logging: ^0.11.3+2
-  logging_appenders:
-  http:
-  charts_flutter:
-  uuid:
-  numberpicker:
+  logging_appenders: 0.4.3
+  http: 0.12.2
+  charts_flutter: ^0.9.0
+  uuid: 2.2.2
+  numberpicker: 1.2.1
 
 dev_dependencies:
   flutter_test:
