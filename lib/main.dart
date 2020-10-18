@@ -67,8 +67,8 @@ class _MainWidgetState extends State<MainWidget> {
   }
 
   Widget _buildTiles() {
-    return GridView.extent(
-      maxCrossAxisExtent: 350,
+    return GridView.count(
+      crossAxisCount: 3,
       padding: const EdgeInsets.all(4),
       mainAxisSpacing: 0,
       crossAxisSpacing: 0,

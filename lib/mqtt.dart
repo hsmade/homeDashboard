@@ -129,7 +129,7 @@ class MqttClient {
     });
   }
 
-  Future<bool> subscribe(String topic,
+  Future<void> subscribe(String topic,
       void Function(String message) onMessage) async {
     if (!connected) {
       await connect();

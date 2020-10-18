@@ -19,7 +19,7 @@ class _BuienRadarWeatherTileState extends State<BuienRadarWeatherTile> {
   String icon;
 
 
-  Future _get_weather(int station) async {
+  Future _getWeather(int station) async {
     final response = await http.get("https://data.buienradar.nl/2.0/feed/json").whenComplete(() => {});
     if (response.statusCode == 200) {
       Map<String, dynamic> result = jsonDecode(response.body);
@@ -52,10 +52,10 @@ class _BuienRadarWeatherTileState extends State<BuienRadarWeatherTile> {
 
   @override
   void initState() {
-    _get_weather(widget.station);
+    _getWeather(widget.station);
     Timer.periodic(new Duration(seconds: 900), (timer) {
       log.info("Updating data");
-      _get_weather(widget.station);
+      _getWeather(widget.station);
     });
     super.initState();
   }
@@ -66,7 +66,7 @@ class _BuienRadarWeatherTileState extends State<BuienRadarWeatherTile> {
 
     return
     GestureDetector(
-      onTap: () { _get_weather(widget.station); },
+      onTap: () { _getWeather(widget.station); },
       child: Container(
           margin: const EdgeInsets.all(10.0),
           color:Colors.grey[900],

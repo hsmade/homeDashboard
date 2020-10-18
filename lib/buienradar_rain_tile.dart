@@ -49,7 +49,7 @@ class _BuienRadarRainTileState extends State<BuienRadarRainTile> {
 
   }
 
-  Future _get_rain() async {
+  Future _getRain() async {
     final response = await http.get("https://gpsgadget.buienradar.nl/data/raintext/?lat=${widget.lat}&lon=${widget.lon}").whenComplete(() => {});
     if (response.statusCode == 200) {
       List<TimeSeriesData> result = _parseRainData(response.body);
@@ -68,10 +68,10 @@ class _BuienRadarRainTileState extends State<BuienRadarRainTile> {
   @override
   void initState() {
     super.initState();
-    _get_rain();
+    _getRain();
     Timer.periodic(new Duration(seconds: 900), (timer) {
       log.info("Updating data");
-      _get_rain();
+      _getRain();
     });
   }
 
@@ -96,7 +96,7 @@ class _BuienRadarRainTileState extends State<BuienRadarRainTile> {
 
     return
     GestureDetector(
-      onTap: () { _get_rain(); },
+      onTap: () { _getRain(); },
       child:
         Container(
           margin: const EdgeInsets.all(10.0),
@@ -148,27 +148,27 @@ class _BuienRadarRainTileState extends State<BuienRadarRainTile> {
   }
 }
 
-String _fakeData = '''057|22:50
-057|22:55
-077|23:00
-087|23:05
-087|23:10
-097|23:15
-105|23:20
-117|23:25
-125|23:30
-105|23:35
-095|23:40
-085|23:45
-075|23:50
-067|23:55
-057|00:00
-035|00:05
-035|00:10
-035|00:15
-035|00:20
-000|00:25
-000|00:30
-000|00:35
-000|00:40
-000|00:45''';
+// String _fakeData = '''057|22:50
+// 057|22:55
+// 077|23:00
+// 087|23:05
+// 087|23:10
+// 097|23:15
+// 105|23:20
+// 117|23:25
+// 125|23:30
+// 105|23:35
+// 095|23:40
+// 085|23:45
+// 075|23:50
+// 067|23:55
+// 057|00:00
+// 035|00:05
+// 035|00:10
+// 035|00:15
+// 035|00:20
+// 000|00:25
+// 000|00:30
+// 000|00:35
+// 000|00:40
+// 000|00:45''';

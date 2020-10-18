@@ -2,7 +2,6 @@ import 'package:flutter/material.dart';
 import 'mqtt.dart';
 import 'package:logging/logging.dart';
 import 'TimeSeriesChart.dart';
-import 'package:charts_flutter/flutter.dart' as charts;
 
 
 class PowerUsageTile extends StatefulWidget {
@@ -77,7 +76,7 @@ class _PowerUsageTileState extends State<PowerUsageTile> {
           ),
         ),
         Expanded(
-          child: new TimeSeriesChart(data, legendaY: "Watt")
+            child: new TimeSeriesChart(data, legendaY: "Watt")
         ),
       ]
     );

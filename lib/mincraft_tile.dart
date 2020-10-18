@@ -18,7 +18,7 @@ class _MinecraftTileState extends State<MinecraftTile> {
   List<String> users;
 
 
-  Future<List<String>> _get_prometheus_value(String metric) async {
+  Future<List<String>> _getPrometheusValue(String metric) async {
     final response = await http.get("${widget.prometheusURL}/api/v1/query?query=${Uri.encodeComponent(metric)}").whenComplete(() => {});
     if (response.statusCode == 200) {
       Map<String, dynamic> result = jsonDecode(response.body);
@@ -37,7 +37,7 @@ class _MinecraftTileState extends State<MinecraftTile> {
   }
 
   _updateValues() async {
-    final users = await _get_prometheus_value('sum(mc_player_online) by (name) > 0');
+    final users = await _getPrometheusValue('sum(mc_player_online) by (name) > 0');
 
     setState(() {
       this.users = users;

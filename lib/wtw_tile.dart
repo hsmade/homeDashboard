@@ -15,13 +15,13 @@ class WtWTile extends StatefulWidget {
 
 class _WtWTileState extends State<WtWTile> {
   var log = Logger('myapp.wtw_tile.dart');
-  double temp_exhaust;
-  double temp_extract;
-  double temp_outdoor;
-  double temp_supply;
+  double tempExhaust;
+  double tempExtract;
+  double tempOutdoor;
+  double tempSupply;
 
 
-  Future<String> _get_prometheus_value(String metric) async {
+  Future<String> _getPrometheusValue(String metric) async {
     final response = await http.get("${widget.prometheusURL}/api/v1/query?query=${Uri.encodeComponent(metric)}").whenComplete(() => {});
     if (response.statusCode == 200) {
       Map<String, dynamic> result = jsonDecode(response.body);
@@ -34,16 +34,16 @@ class _WtWTileState extends State<WtWTile> {
   }
 
   _updateValues() async {
-    final exhaust = await _get_prometheus_value('comfoconnect_pdo_value{ID="275"} / 10');
-    final extract = await _get_prometheus_value('comfoconnect_pdo_value{ID="274"} / 10');
-    final outdoor = await _get_prometheus_value('comfoconnect_pdo_value{ID="220"} / 10');
-    final supply = await _get_prometheus_value('comfoconnect_pdo_value{ID="221"} / 10');
+    final exhaust = await _getPrometheusValue('comfoconnect_pdo_value{ID="275"} / 10');
+    final extract = await _getPrometheusValue('comfoconnect_pdo_value{ID="274"} / 10');
+    final outdoor = await _getPrometheusValue('comfoconnect_pdo_value{ID="220"} / 10');
+    final supply = await _getPrometheusValue('comfoconnect_pdo_value{ID="221"} / 10');
 
     setState(() {
-      this.temp_exhaust = double.parse(exhaust);
-      this.temp_extract = double.parse(extract);
-      this.temp_outdoor = double.parse(outdoor);
-      this.temp_supply = double.parse(supply);
+      this.tempExhaust = double.parse(exhaust);
+      this.tempExtract = double.parse(extract);
+      this.tempOutdoor = double.parse(outdoor);
+      this.tempSupply = double.parse(supply);
     });
   }
 
@@ -79,25 +79,25 @@ class _WtWTileState extends State<WtWTile> {
                   flex: 1,
                   child: Row(
                     children: [
-                     Expanded(flex:5, child: FittedBox(fit: BoxFit.fill, child: Center(child: Text("$temp_outdoor°C", style: TextStyle(color: Colors.white))))),
+                     Expanded(flex:5, child: FittedBox(fit: BoxFit.fill, child: Center(child: Text("$tempOutdoor°C", style: TextStyle(color: Colors.white))))),
                      Expanded(flex:1, child: FittedBox(fit: BoxFit.fill, child: Center(child: Text(" ", style: TextStyle(color: Colors.white))))),
-                     Expanded(flex:5, child: FittedBox(fit: BoxFit.fill, child: Center(child: Text("$temp_exhaust°C", style: TextStyle(color: Colors.white))))),
+                     Expanded(flex:5, child: FittedBox(fit: BoxFit.fill, child: Center(child: Text("$tempExhaust°C", style: TextStyle(color: Colors.white))))),
                     ],
                   ),
                 ),
 
                 Expanded(
                   flex: 4,
-                  child: Text("")
+                    child: Text("")
                 ),
 
                 Expanded(
                   flex: 1,
                   child: Row(
                     children: [
-                      Expanded(flex:5, child: FittedBox(fit: BoxFit.fill, child: Center(child: Text("$temp_supply°C", style: TextStyle(color: Colors.white))))),
+                      Expanded(flex:5, child: FittedBox(fit: BoxFit.fill, child: Center(child: Text("$tempSupply°C", style: TextStyle(color: Colors.white))))),
                       Expanded(flex:1, child: FittedBox(fit: BoxFit.fill, child: Center(child: Text(" ", style: TextStyle(color: Colors.white))))),
-                      Expanded(flex:5, child: FittedBox(fit: BoxFit.fill, child: Center(child: Text("$temp_extract°C", style: TextStyle(color: Colors.white))))),
+                      Expanded(flex:5, child: FittedBox(fit: BoxFit.fill, child: Center(child: Text("$tempExtract°C", style: TextStyle(color: Colors.white))))),
                     ],
                   ),
                 ),
