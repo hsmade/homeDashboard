@@ -12,7 +12,6 @@ class TimeSeriesChart extends StatelessWidget {
       new charts.Series<TimeSeriesData, DateTime>(
         id: 'Data',
         colorFn: (_, value) {
-          print("COLOR: value:${data[value].data}\n");
           if (data[value].data < 270) return charts.MaterialPalette.green.shadeDefault;
           if (data[value].data < 400) return charts.MaterialPalette.blue.shadeDefault;
           else return charts.MaterialPalette.red.shadeDefault;
