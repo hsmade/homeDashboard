@@ -11,15 +11,19 @@ import 'package:myapp/buienradar_rain_tile.dart';
 import 'package:myapp/buienradar_weather_tile.dart';
 import 'package:myapp/mincraft_tile.dart';
 import 'package:myapp/wtw_tile.dart';
+import 'package:sentry/sentry.dart';
 import 'mqtt.dart';
 import 'package:logging/logging.dart';
 import 'package:logging_appenders/logging_appenders.dart';
 import 'temperature_tile.dart';
 import 'package:uuid/uuid.dart';
+import 'dart:async';
+import 'sentry.dart';
+
 
 final _logger = Logger('myapp.main.dart');
 
-void main(){
+void main() async {
   Logger.root.level = Level.ALL;
   final _lokiAppender = new LokiApiAppender(
     server: "loki.kiezelsteen18.nl",
@@ -29,7 +33,18 @@ void main(){
   PrintAppender().attachToLogger(Logger.root);
   _lokiAppender.attachToLogger(Logger.root);
   _logger.info("Starting main");
-  runApp(MyApp());
+
+  FlutterError.onError = (details, {bool forceReport = false}) {logException(details);};
+  await logEvent("starting app", SeverityLevel.info, {});
+  runZonedGuarded(
+        () => runApp(MyApp()),
+        (error, stackTrace) {
+          sentry.captureException(
+            exception: error,
+            stackTrace: stackTrace,
+          );
+        },
+  );
 }
 
 class MyApp extends StatelessWidget {
@@ -68,7 +83,7 @@ class _MainWidgetState extends State<MainWidget> {
 
   Widget _buildTiles() {
     return GridView.count(
-      crossAxisCount: 4,
+      crossAxisCount: 3,
       padding: const EdgeInsets.all(4),
       mainAxisSpacing: 0,
       crossAxisSpacing: 0,

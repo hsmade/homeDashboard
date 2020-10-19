@@ -19,7 +19,7 @@ class _WtWTileState extends State<WtWTile> {
   double tempExtract;
   double tempOutdoor;
   double tempSupply;
-  double powerConsumption;
+  double powerConsumption = 0;
 
 
   Future<String> _getPrometheusValue(String metric) async {
