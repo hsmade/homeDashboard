@@ -86,7 +86,7 @@ class _TemperatureTileState extends State<TemperatureTile> {
           Expanded(
             flex: 2,
             child: new NumberPicker.integer(
-              initialValue: setPoints.indexOf(setPoint), minValue: 0, maxValue: setPoints.length, onChanged: (index) => _setSetpoint(setPoints[index]),
+              initialValue: setPoints.indexOf(setPoint), minValue: 0, maxValue: setPoints.length-1, onChanged: (index) => _setSetpoint(setPoints[index]),
               textMapper: (index) => setPoints[int.parse(index)].toString(),
             )
           ),
