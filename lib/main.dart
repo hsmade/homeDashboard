@@ -39,10 +39,8 @@ void main() async {
   runZonedGuarded(
         () => runApp(MyApp()),
         (error, stackTrace) {
-          sentry.captureException(
-            exception: error,
-            stackTrace: stackTrace,
-          );
+          FlutterErrorDetails details = new FlutterErrorDetails(exception: error, stack: stackTrace);
+          logException(details);
         },
   );
 }

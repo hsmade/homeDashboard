@@ -16,7 +16,7 @@ class TemperatureTile extends StatefulWidget {
 class _TemperatureTileState extends State<TemperatureTile> {
   var log = Logger('myapp.temperature_tile.dart');
   double temperature = -255;
-  double setPoint = 0;
+  double setPoint = -255;
   bool heaterOn = false;
   List<double> setPoints = [for(var i=18.0; i<28.0; i+=0.5) i];
 

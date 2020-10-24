@@ -37,6 +37,7 @@ dependencies:
   uuid: 2.2.2
   numberpicker: 1.2.1
   sentry: ">=3.0.0 <4.0.0"
+  device_info:
 
 dev_dependencies:
   flutter_test:
