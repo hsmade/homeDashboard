@@ -92,8 +92,8 @@ class _MainWidgetState extends State<MainWidget> {
         new BuienRadarRainTile(52.02, 5.18),
         new MinecraftTile("https://prometheus.kiezelsteen18.nl"),
         new PowerUsageTile(new MqttClient("mqtt.kiezelsteen18.nl", Uuid().v4())),
-        new Tile("leeg", Text("", style: TextStyle(color: Colors.white))),
-        new Tile("leeg", Text("", style: TextStyle(color: Colors.white))),
+        // new Tile("leeg", Text("", style: TextStyle(color: Colors.white))),
+        // new Tile("leeg", Text("", style: TextStyle(color: Colors.white))),
       ],
     );
   }

@@ -85,21 +85,15 @@ class _TemperatureTileState extends State<TemperatureTile> {
           ),
           Expanded(
             flex: 2,
-            child: new NumberPicker.integer(
+            child: setPoint==-255?Text("- -"): new NumberPicker.integer(
               initialValue: setPoints.indexOf(setPoint), minValue: 0, maxValue: setPoints.length-1, onChanged: (index) => _setSetpoint(setPoints[index]),
               textMapper: (index) => setPoints[int.parse(index)].toString(),
             )
           ),
         ],
-      )
+      ),
+      color: heaterOn?Colors.red[900]:Colors.grey[900]
     );
-      Container(
-        margin: const EdgeInsets.all(10.0),
-        color: heaterOn?Colors.red[900]:Colors.grey[900],
-        width: 100.0,
-        height: 100.0,
-        child: _content(),
-      );
   }
 
   Widget _content() {

@@ -5,8 +5,9 @@ class TimeSeriesChart extends StatelessWidget {
   final List<TimeSeriesData> data;
   final String legendaY;
   final charts.Color Function(TimeSeriesData, int) colorFn;
+  final charts.Color Function(TimeSeriesData, int) areaColorFn;
 
-  TimeSeriesChart(this.data, {this.legendaY, this.colorFn});
+  TimeSeriesChart(this.data, {this.legendaY, this.colorFn, this.areaColorFn});
 
   List<charts.Series<TimeSeriesData, DateTime>> createSeries(List<TimeSeriesData> data) {
     return [
@@ -16,6 +17,7 @@ class TimeSeriesChart extends StatelessWidget {
         domainFn: (TimeSeriesData point, _) => point.time,
         measureFn: (TimeSeriesData point, _) => point.data,
         data: data,
+        areaColorFn: areaColorFn,
       )
     ];
   }
