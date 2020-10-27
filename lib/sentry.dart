@@ -2,21 +2,28 @@ import 'package:flutter/widgets.dart';
 import 'package:sentry/sentry.dart';
 import 'package:logging/logging.dart';
 import 'package:device_info/device_info.dart';
+import 'package:package_info/package_info.dart';
 
 final log = Logger('sentry.main.dart');
+
+Future<String> getVersion() async {
+  PackageInfo packageInfo = await PackageInfo.fromPlatform();
+  return "HomeDashboardFlutter@${packageInfo.version}";
+}
 
 Future<void> logEvent(
     String message, SeverityLevel severity, Map<String, dynamic> data) async {
   WidgetsFlutterBinding.ensureInitialized();
   final DeviceInfoPlugin deviceInfoPlugin = DeviceInfoPlugin();
   final info = await deviceInfoPlugin.androidInfo;
+  final version = await getVersion();
   final sentry = SentryClient(dsn: "https://d283405d0f054e5cae76fc4abc7706ff@o463949.ingest.sentry.io/5469614",
     environmentAttributes: Event(extra: {
       'model': info.model,
       'board': info.board,
       'brand': info.brand,
       'device': info.device,
-    })
+    }, release: version)
   );
 
   final Event event = Event(
@@ -43,13 +50,14 @@ void logException(FlutterErrorDetails details) async {
   WidgetsFlutterBinding.ensureInitialized();
   final DeviceInfoPlugin deviceInfoPlugin = DeviceInfoPlugin();
   final info = await deviceInfoPlugin.androidInfo;
+  final version = await getVersion();
   final sentry = SentryClient(dsn: "https://d283405d0f054e5cae76fc4abc7706ff@o463949.ingest.sentry.io/5469614",
       environmentAttributes: Event(extra: {
         'model': info.model,
         'board': info.board,
         'brand': info.brand,
         'device': info.device,
-      })
+      }, release: version)
   );
 
   log.info("Sending exception to sentry");
