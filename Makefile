@@ -1,4 +1,4 @@
-VERSION = $(grep "^version:" pubspec.yaml | cut -d' ' -f2)
+VERSION=$(shell grep "^version:" pubspec.yaml | cut -d' ' -f2)
 .PHONY: build
 
 build:
