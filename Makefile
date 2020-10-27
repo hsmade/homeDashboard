@@ -1,9 +1,10 @@
+VERSION = $(grep "^version:" pubspec.yaml | cut -d' ' -f2)
 .PHONY: build
 
 build:
-	flutter build apk $(grep "^version:" pubspec.yaml | cut -d' ' -f2)
+	flutter build apk $(VERSION)
 
 release:
 	git push
-	git tag v$(grep "^version:" pubspec.yaml | cut -d' ' -f2)
+	git tag v$(VERSION)
 	git push --tags
