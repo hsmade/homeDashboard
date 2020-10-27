@@ -69,4 +69,4 @@ jobs:
        run: |
          curl -sL https://sentry.io/get-cli/ | bash
          sentry-cli releases new -p ${SENTRY_ORG} ${{ steps.get_version.outputs.VERSION }}
-         sentry-cli releases set-commits --commit hsmade/homeDashboard@${{ steps.get_version.outputs.VERSION }} ${{ steps.get_version.outputs.VERSION }}
+         sentry-cli releases set-commits --commit hsmade/homeDashboard@$v{{ steps.get_version.outputs.VERSION }} ${{ steps.get_version.outputs.VERSION }}
