@@ -60,6 +60,11 @@ jobs:
       SENTRY_ORG: ${{ secrets.SENTRY_ORG }}
     steps:
      - uses: actions/checkout@v1.0.0
+
+     - name: Get the version
+       id: get_version
+       run: echo ::set-output name=VERSION::$(grep "^version:" pubspec.yaml | cut -d' ' -f2)
+
      - name: Create new Sentry release and deploy
        run: |
          curl -sL https://sentry.io/get-cli/ | bash
