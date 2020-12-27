@@ -65,16 +65,16 @@ class _WtWTileState extends State<WtWTile> {
 
   _updateValues() async {
     Duration duration = new Duration(hours: 1);
-    final extractTemp = double.parse(await _getPrometheusValue('comfoconnect_pdo_value{ID="274"} / 10'));
-    final supplyTemp = double.parse(await _getPrometheusValue('comfoconnect_pdo_value{ID="221"} / 10'));
-    final extractHum = double.parse(await _getPrometheusValue('comfoconnect_pdo_value{ID="290"}'));
-    final supplyHum = double.parse(await _getPrometheusValue('comfoconnect_pdo_value{ID="294"}'));
-    final exhaustFan = double.parse(await _getPrometheusValue('comfoconnect_pdo_value{ID="119"}'));
-    final supplyFan = double.parse(await _getPrometheusValue('comfoconnect_pdo_value{ID="120"}'));
-    final powerConsumption = double.parse(await _getPrometheusValue('comfoconnect_pdo_value{ID="128"}'));
-    this.temperatureData = await _getPrometheusRange("(sum(comfoconnect_pdo_value{ID=\"221\"}) - sum(comfoconnect_pdo_value{ID=\"274\"})) / 10", duration);
-    this.humidityData = await _getPrometheusRange("(sum(comfoconnect_pdo_value{ID=\"294\"}) - sum(comfoconnect_pdo_value{ID=\"290\"}))", duration);
-    this.fanData = await _getPrometheusRange("comfoconnect_pdo_value{ID=\"119\"}", duration);
+    final extractTemp = double.parse(await _getPrometheusValue('temperature_c{domain="sensor",entity="sensor.comfoairq_inside_temperature"}'));
+    final supplyTemp = double.parse(await _getPrometheusValue('temperature_c{domain="sensor",entity="sensor.comfoairq_supply_temperature"}'));
+    final extractHum = double.parse(await _getPrometheusValue('humidity_percent{domain="sensor",entity="sensor.comfoairq_inside_humidity"}'));
+    final supplyHum = double.parse(await _getPrometheusValue('humidity_percent{domain="sensor",entity="sensor.comfoairq_supply_humidity"}'));
+    final exhaustFan = double.parse(await _getPrometheusValue('sensor_unit_rpm{domain="sensor",entity="sensor.comfoairq_exhaust_fan_speed"}'));
+    final supplyFan = double.parse(await _getPrometheusValue('sensor_unit_rpm{domain="sensor",entity="sensor.comfoairq_supply_fan_speed"}'));
+    final powerConsumption = double.parse(await _getPrometheusValue('power_w{domain="sensor",entity="sensor.comfoairq_power_usage"}'));
+    this.temperatureData = await _getPrometheusRange('(sum(temperature_c{domain="sensor",entity="sensor.comfoairq_supply_temperature"}) - sum(temperature_c{domain="sensor",entity="sensor.comfoairq_inside_temperature"}))', duration);
+    this.humidityData = await _getPrometheusRange('(sum(humidity_percent{domain="sensor",entity="sensor.comfoairq_supply_humidity"}) - sum(humidity_percent{domain="sensor",entity="sensor.comfoairq_inside_humidity"}))', duration);
+    this.fanData = await _getPrometheusRange('sensor_unit_rpm{domain="sensor",entity="sensor.comfoairq_exhaust_fan_speed"}', duration);
 
     setState(() {
       this.temperatureDifference = supplyTemp - extractTemp;
