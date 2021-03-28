@@ -38,7 +38,7 @@ class _PowerUsageTileState extends State<PowerUsageTile> {
   @override
   void initState() {
     data = _emptyData(10);
-    widget.myMqtt.subscribe("/power/current", (String message){
+    widget.myMqtt.subscribe("/power/actual_consumption", (String message){
       log.info("parsing message: $message");
       _newUsage(message);
     });
